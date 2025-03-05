@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import {  useEffect, useState } from "react"
 import { fetchLeads } from "../features/leads/leadsSlice"
 import { fetchAgentById } from "../features/salesAgents/agentsSlice"
+import Loading from "../Component/Loading"
 
 const AgentView = () => {
 
@@ -12,7 +13,7 @@ const AgentView = () => {
   
   const { agent } = useSelector((state) => state.agentState)
   
-  const { leads } = useSelector((state) => state.leadState)
+  const { leads ,leadStatus } = useSelector((state) => state.leadState)
 
   const [statusFilter,setStatusFilter] = useState("All")
   const [priorityFilter,setPriorityFilter] = useState("All")
@@ -99,7 +100,7 @@ const AgentView = () => {
       <p>Email: {agent?.email}</p>
       <p className="fs-4">Leads:</p>
       <Filters/>
-      <AgentLeadLists />
+      {leadStatus==="loading" ? <Loading/> : <AgentLeadLists />}
       { sortFilteredLeads.length<1  && <NoLeadFound/>}
     </>
   )

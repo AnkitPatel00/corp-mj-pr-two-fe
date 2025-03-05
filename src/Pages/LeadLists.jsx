@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { deleteLeads, fetchLeads } from "../features/leads/leadsSlice"
 import { fetchAgent } from "../features/salesAgents/agentsSlice"
+import Loading from "../Component/Loading"
 const LeadLists = () => {
 
   const dispatch = useDispatch()
 
-  const { leads } = useSelector((state) => state.leadState)
 
-  const { agents } = useSelector((state) => state.agentState)
 
-console.log(leads)
+  const { leads, leadStatus } = useSelector((state) => state.leadState)
+  
+      console.log(leadStatus)
+
+  const { agents,agentStatus } = useSelector((state) => state.agentState)
 
   const [searchParams, setSearchParams] = useSearchParams()
   
@@ -208,16 +211,17 @@ useEffect(() => {
       
     )
   }
-
-
-
   
   return (
     <>
       <h2 className="display-6 mb-4">Lead List</h2>
 
       <Filter />   
-      <LeadList />
+      {leadStatus === "loading" || agentStatus === "loading" ?
+      
+         <Loading/>:
+        
+        <LeadList />}
       
         { leads.length<1 && <h5>No Lead Found</h5>}
 

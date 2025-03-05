@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
 import { useDispatch ,useSelector } from "react-redux"
 import { fetchLeads } from "../features/leads/leadsSlice"
-import { Link, useNavigate,useSearchParams } from "react-router-dom"
+import { Link,useSearchParams } from "react-router-dom"
+import Loading from "../Component/Loading"
 
 const Dashboard = () => {
 
   const dispatch = useDispatch()
 
-  const { leads } = useSelector((state) => state.leadState)
+  const { leads, leadStatus } = useSelector((state) => state.leadState)
+  
+    console.log(leadStatus)
 
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -115,11 +118,9 @@ const Dashboard = () => {
     <div className="">
       <h2 className="display-6 mb-4">Dashboard</h2>
        <Filters/>
-      <LeadsList />
+      {leadStatus==="loading" ? <Loading/> : <><LeadsList /> <LeadStatus /></>}
 
        { leads.length<1 && <h5>No Lead Found</h5>}
-
-      {leads.length>0 &&<LeadStatus />}
      
       <Link to="/leads/add" className="btn btn-primary mt-3">Add New Lead</Link>
       

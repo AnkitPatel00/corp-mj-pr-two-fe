@@ -21,6 +21,23 @@ export const fetchLeads = createAsyncThunk("fetch/leads", async (query) => {
   }
 })
 
+export const salesLeads = createAsyncThunk("sales/leads", async (query) => {
+  
+  try {
+     const response = await axios(`${apiURl}/api/leads?${query}`)
+    return response.data 
+  }
+  catch (error)
+  {
+    if (error.response)
+    {
+      throw new Error(error.response.data.error)
+    }
+    else {
+      throw new Error(error.message)   
+}
+  }
+})
 
 export const fetchLeadById = createAsyncThunk("fetchLead/id", async (leadId) => {
    try {
@@ -98,9 +115,12 @@ const leadsSlice = createSlice({
   name: "leadState",
   initialState: {
     leads: [],
+    sales: [],
     leadById:null,
     leadStatus:"idle",
     leadError: "null",
+    salesStatus:"idle",
+    salesError: "null",
     addLeadStatus:"idle",
     addLeadError:null,
     updateLeadStatus:"idle",
@@ -126,6 +146,21 @@ const leadsSlice = createSlice({
     builder.addCase(fetchLeads.rejected, (state,action) => {
       state.leadStatus = "reject"
       state.leadError = action.error.message
+    })
+    
+    
+    builder.addCase(salesLeads.pending, (state) => {
+      state.salesStatus ="loading"
+    })
+    builder.addCase(salesLeads.fulfilled, (state,action) => {
+      state.salesStatus = "success"
+       state.updateLeadStatus = "idle"
+      state.sales = action.payload
+      state.addLeadStatus ="idle"
+    })
+    builder.addCase(salesLeads.rejected, (state,action) => {
+      state.salesStatus = "reject"
+      state.salesError = action.error.message
     })
     
     

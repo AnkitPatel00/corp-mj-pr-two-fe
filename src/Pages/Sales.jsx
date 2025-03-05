@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
-import { fetchLeads } from "../features/leads/leadsSlice"
+import { salesLeads } from "../features/leads/leadsSlice"
 import { Link } from "react-router-dom"
+import Loading from "../Component/Loading"
 
 const Sales = () => {
 
@@ -10,20 +11,16 @@ const Sales = () => {
 
   const dispatch = useDispatch()
 
-  const { leads } = useSelector((state) => state.leadState)
+  const { sales, salesStatus } = useSelector((state) => state.leadState)
+  
   
   useEffect(() => {
-    
     const query = new URLSearchParams()
-
     query.set("status","Closed")
-
-dispatch(fetchLeads(query))
-
+dispatch(salesLeads(query))
   }, [])
 
-
-  const filteredLeads = leads?.filter((lead)=>lead.name.toLowerCase().includes(search.toLowerCase()))
+  const filteredLeads = sales?.filter((lead)=>lead.name.toLowerCase().includes(search.toLowerCase()))
   
 
   const SalesList = () => {
@@ -31,7 +28,7 @@ dispatch(fetchLeads(query))
       <div className="row">
         <div className="col-md-6">
            <ol className="list-group list-group-numbered">
-        {filteredLeads.length > 0 && filteredLeads.map((lead) => {
+        { filteredLeads.map((lead) => {
           return (
             <li key={lead._id} className="list-group-item d-flex justify-content-between align-items-start">
               <Link className="text-secondary ms-2 me-auto link-underline link-underline-opacity-0" to={`/leads/${lead._id}`}> {lead.name}
@@ -58,7 +55,7 @@ dispatch(fetchLeads(query))
       </div>
       </div>
      
-      <SalesList/>
+     {salesStatus==="loading" ? <Loading/> : <SalesList/>}
     </>    
   )
 }

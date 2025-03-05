@@ -4,13 +4,14 @@ import { fetchLeads } from "../features/leads/leadsSlice"
 import { useEffect, useState } from "react"
 import { Pie,Bar } from 'react-chartjs-2' 
 import { Chart  } from "chart.js/auto";
+import Loading from "../Component/Loading"
 
 
 
 const Reports = () => {
 
-  const { lastWeekClosedLeads, totalLeadsInPipeline: { totalLeadsInPipeline: pipelineLead } } = useSelector((state) => state.leadReportState)
-    const { leads } = useSelector((state) => state.leadState)
+  const { lastWeekClosedLeads,closeLeadStatus,pipelineLeadStatus,totalLeadsInPipeline: { totalLeadsInPipeline: pipelineLead } } = useSelector((state) => state.leadReportState)
+    const { leads ,leadStatus } = useSelector((state) => state.leadState)
 
   const dispatch = useDispatch()
 
@@ -70,7 +71,14 @@ const Reports = () => {
       label: "Leads",
       data: Object.values(leadsStatusCount)
     }]
-}
+  }
+  
+  if (closeLeadStatus === "loading" || pipelineLeadStatus === "loading" || leadStatus === "loading" )
+  {
+    return (
+      <Loading/>
+    )
+  }
 
 
   return (

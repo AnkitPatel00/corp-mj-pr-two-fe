@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useParams } from "react-router-dom"
 import { fetchLeadById } from "../features/leads/leadsSlice"
 import { addComments, fetchComments } from "../features/leadComments/leadCommentSlice"
+import Loading from "../Component/Loading"
 
 const LeadDetails = () => {
 
@@ -12,8 +13,8 @@ const LeadDetails = () => {
   
   const dispatch = useDispatch()
 
-  const {leadById} = useSelector((state)=>state.leadState)
-  const {comments} = useSelector((state)=>state.commentState)
+  const {leadById,leadStatus} = useSelector((state)=>state.leadState)
+  const {comments,fetchCommentStatus} = useSelector((state)=>state.commentState)
 
   useEffect(() => {
     dispatch(fetchLeadById(leadId))
@@ -40,6 +41,8 @@ const LeadDetails = () => {
       </>
     )
   }
+
+ 
 
   const Comments = () => {
     return  (
@@ -80,6 +83,15 @@ const LeadDetails = () => {
       </div>
     )
   }
+
+
+   if (fetchCommentStatus === "loading" || leadStatus === "loading")
+  {
+     return (
+      <Loading/>
+    )
+  }
+
 
   return (
     <>

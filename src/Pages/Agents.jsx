@@ -2,12 +2,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { fetchAgent } from "../features/salesAgents/agentsSlice"
 import { Link } from "react-router-dom"
+import Loading from "../Component/Loading"
 
 const Agents = () => {
 
   const dispatch = useDispatch()
 
-  const { agents } = useSelector((state) => state.agentState)
+  const { agents,agentStatus } = useSelector((state) => state.agentState)
 
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const Agents = () => {
       <h2 className="display-6 mb-4">Sales Agent List</h2>
       <div className="row">
         <div className="col-6">
-           <AgentList /> 
+         {agentStatus === "loading" ? <Loading/> :  <AgentList /> }
 </div>
       </div>
     
