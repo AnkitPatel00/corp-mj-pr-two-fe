@@ -139,8 +139,8 @@ dispatch(addLeads(formData))
           <option value="Follow-up">Follow-up</option>
         </select>
 
-        {!isUpdateLead? <button className="btn btn-primary mt-3">{addLeadStatus === "loading"?"Saving...":"Submit"}</button>:
-        <button className="btn btn-primary mt-3">{addLeadStatus === "loading"?"Saving...":"Update Lead"}</button>}
+            {!isUpdateLead ? <button className={`btn btn-${addLeadStatus === "loading"?"info":"primary"} mt-3`}>{addLeadStatus === "loading"?"Saving...":"Submit"}</button>:
+        <button className={`btn btn-${updateLeadStatus === "loading"?"info":"primary"} mt-3`}>{updateLeadStatus === "loading"?"Updating...":"Update Lead"}</button>}
 
         {addLeadStatus === "success" && <p className="text-info">Lead added Successfully</p>}
         {addLeadError && <p className="text-danger">{addLeadError}</p>}

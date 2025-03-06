@@ -14,7 +14,7 @@ const LeadDetails = () => {
   const dispatch = useDispatch()
 
   const {leadById,leadStatus} = useSelector((state)=>state.leadState)
-  const {comments,fetchCommentStatus} = useSelector((state)=>state.commentState)
+  const {comments,fetchCommentStatus,addCommentStatus} = useSelector((state)=>state.commentState)
 
   useEffect(() => {
     dispatch(fetchLeadById(leadId))
@@ -78,7 +78,7 @@ const LeadDetails = () => {
       <div className="row">
 <div className="col-4">
         <input type="text" className="form-control mb-2" value={comment} placeholder="comment" onChange={(e)=>setComment(e.target.value)} required/>
-        <button className="btn btn-primary" onClick={handleComment}>add comment</button>
+        <button className={`btn btn-${addCommentStatus==="loading"?"info":"primary"}`} onClick={handleComment}>{addCommentStatus==="loading"? "adding Comment..." :"add comment"}</button>
       </div>
       </div>
     )

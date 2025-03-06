@@ -11,7 +11,7 @@ const AgentView = () => {
 
   const { agentId } = useParams()
   
-  const { agent } = useSelector((state) => state.agentState)
+  const { agent ,agentByIdStatus} = useSelector((state) => state.agentState)
   
   const { leads ,leadStatus } = useSelector((state) => state.leadState)
 
@@ -82,6 +82,13 @@ const AgentView = () => {
   )
     })}
       </ol>
+    )
+  }
+
+  if (agentByIdStatus === "loading")
+  {
+    return (
+      <Loading/>
     )
   }
 

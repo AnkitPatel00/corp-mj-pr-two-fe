@@ -118,9 +118,9 @@ const leadsSlice = createSlice({
     sales: [],
     leadById:null,
     leadStatus:"idle",
-    leadError: "null",
+    leadError: null,
     salesStatus:"idle",
-    salesError: "null",
+    salesError: null,
     addLeadStatus:"idle",
     addLeadError:null,
     updateLeadStatus:"idle",
@@ -141,7 +141,8 @@ const leadsSlice = createSlice({
       state.leadStatus = "success"
        state.updateLeadStatus = "idle"
       state.leads = action.payload
-      state.addLeadStatus ="idle"
+      state.addLeadStatus = "idle"
+      state.leadError =null
     })
     builder.addCase(fetchLeads.rejected, (state,action) => {
       state.leadStatus = "reject"

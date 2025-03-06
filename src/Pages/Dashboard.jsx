@@ -8,9 +8,7 @@ const Dashboard = () => {
 
   const dispatch = useDispatch()
 
-  const { leads, leadStatus } = useSelector((state) => state.leadState)
-  
-    console.log(leadStatus)
+  const { leads, leadStatus,leadError } = useSelector((state) => state.leadState)
 
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -116,7 +114,9 @@ const Dashboard = () => {
 
   return (
     <div className="">
+
       <h2 className="display-6 mb-4">Dashboard</h2>
+       {leadError &&<p className="text-danger">{leadError}</p>}
        <Filters/>
       {leadStatus==="loading" ? <Loading/> : <><LeadsList /> <LeadStatus /></>}
 

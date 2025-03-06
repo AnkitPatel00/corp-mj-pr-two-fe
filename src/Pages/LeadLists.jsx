@@ -10,9 +10,7 @@ const LeadLists = () => {
 
 
 
-  const { leads, leadStatus } = useSelector((state) => state.leadState)
-  
-      console.log(leadStatus)
+  const { leads, leadStatus,deleteLeadStatus,leadError } = useSelector((state) => state.leadState)
 
   const { agents,agentStatus } = useSelector((state) => state.agentState)
 
@@ -27,7 +25,9 @@ const LeadLists = () => {
   const [sortByDay, setSortByDay] = useState(sortDayQuery)
   const [sortByPriority, setSortByPriority] = useState("")
 
-  const [filteredLeads,setFilteredLeads]= useState(leads||[])
+  const [filteredLeads, setFilteredLeads] = useState(leads || [])
+  
+  const [deleteBtnId,setDeleteBtnId]= useState(null)
 
   useEffect(() => {
 setSearchParams((prevParams) => {
@@ -77,8 +77,6 @@ useEffect(() => {
 }, [sortByPriority]);
 
 
-  
-
   useEffect(() => {
     setFilteredLeads(leads)
   },[leads])
@@ -103,8 +101,18 @@ useEffect(() => {
   const LeadList = () => {
 
     const handleLeadDelete = (leadId) => {
+      setDeleteBtnId(leadId)
       dispatch(deleteLeads(leadId))
     }
+
+    useEffect(() => {
+  
+      if (deleteLeadStatus === "success")
+      {
+        setDeleteBtnId(null)
+      }
+
+},[deleteLeadStatus])
 
     return (
        <div className="row my-4 gap-3">
@@ -133,7 +141,7 @@ useEffect(() => {
                   </Link>
 
                    
-                   <button className="btn btn-danger btn-sm mt-2" onClick={() => handleLeadDelete(lead._id)}>Delete</button>
+                   <button className={`btn btn-${deleteBtnId===lead._id && deleteLeadStatus==="loading"?"info":"danger"} btn-sm mt-2`} onClick={() => handleLeadDelete(lead._id)}>{deleteBtnId===lead._id && deleteLeadStatus==="loading" ? "Deleting..." : "Delete"}</button>
                   
                 </div>
                 
@@ -151,6 +159,7 @@ useEffect(() => {
       <>
         
         <div className="row">
+          {leadError &&<p className="text-danger">{leadError}</p>}
           <div className="col-md-6">
             {(searchParams.toString().length > 0 || sortByPriority) && <ClearFilter />}
        </div>

@@ -8,7 +8,7 @@ const AddNewAgent = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-const {addAgentStatus} = useSelector((state)=>state.agentState)
+const {addAgentStatus,addAgentError} = useSelector((state)=>state.agentState)
 
   const initialState ={name:"",email:""}
 
@@ -42,7 +42,7 @@ const {addAgentStatus} = useSelector((state)=>state.agentState)
     <>
       
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-4">
           
           <form onSubmit={handleSubmit}>
 
@@ -52,8 +52,10 @@ const {addAgentStatus} = useSelector((state)=>state.agentState)
         <label htmlFor="email" className="form-label mt-3">Email Address: </label>
         <input className="form-control" type="email" value={formData.email} name="email" onChange={handleFormData} id="email" required/>
         
-        <button className="btn btn-primary mt-3">Create Agent</button>
+        <button className={`btn btn-${addAgentStatus==="loading"?"info":"primary"} mt-3`}>{addAgentStatus==="loading"?"Adding...":"Add Agent"}</button>
 
+             {addAgentError && <p className="text-danger">{addAgentError}</p>}
+            
     </form>
 
       </div>

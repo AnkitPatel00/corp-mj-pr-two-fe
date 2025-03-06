@@ -60,9 +60,11 @@ const agentsSlice = createSlice({
     agents: [],
     agent:null,
     agentStatus:"idle",
-    agentError:"null",
+    agentError:null,
+    agentByIdStatus:"idle",
+    agentByIdError:null,
     addAgentStatus:"idle",
-    addAgentError:"null"
+    addAgentError:null
   },
   reducers: {
     
@@ -97,15 +99,16 @@ const agentsSlice = createSlice({
     
     
     builder.addCase(fetchAgentById.pending, (state) => {
-       state.agentStatus ="loading"
+       state.agentByIdStatus ="loading"
      })
      builder.addCase(fetchAgentById.fulfilled, (state,action) => {
-       state.agentStatus = "success"
+       state.agentByIdStatus = "success"
        state.agent = action.payload
+       state.agentByIdError = null
      })
      builder.addCase(fetchAgentById.rejected, (state,action) => {
-       state.agentStatus = "reject"
-       state.agentError = action.error.message
+       state.agentByIdStatus = "reject"
+       state.agentByIdError = action.error.message
      })
 
 
