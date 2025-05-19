@@ -6,7 +6,7 @@ const apiURl= "https://anvayacrm-be.vercel.app"
 export const fetchLeads = createAsyncThunk("fetch/leads", async (query) => {
   
   try {
-     const response = await axios(`${apiURl}/api/leads?${query}`)
+     const response = await axios(`${apiURl}/api/leads${query ? `?${query}`:''}`)
     return response.data 
   }
   catch (error)
@@ -24,7 +24,7 @@ export const fetchLeads = createAsyncThunk("fetch/leads", async (query) => {
 export const salesLeads = createAsyncThunk("sales/leads", async (query) => {
   
   try {
-     const response = await axios(`${apiURl}/api/leads${query && `?${query}`}`)
+     const response = await axios(`${apiURl}/api/leads${query ? `?${query}`:''}`)
     return response.data 
   }
   catch (error)
