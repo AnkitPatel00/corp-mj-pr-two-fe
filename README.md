@@ -1,5 +1,3 @@
-# React + Vite
-
 # Anvaya CRM
 
 ## Routes
@@ -10,6 +8,6 @@
 5. Report
 
 ### 1. Dashboard 
--[x] Lead List
--[x] Lead Status
--[] Quick Filter
+- [x] Lead List
+- [x] Lead Status
+- [] Quick Filter
