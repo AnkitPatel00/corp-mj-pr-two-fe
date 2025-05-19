@@ -24,7 +24,7 @@ Watch this video [here](https://drive.google.com/file/d/1VDAu5rjALKIhl78CznsKBlk
 - Lead Delete
 - Add New Lead
 
-   #### View Leads
+- View Leads
    - Lead Info
    - Edit Lead
    - comments
@@ -39,7 +39,7 @@ Watch this video [here](https://drive.google.com/file/d/1VDAu5rjALKIhl78CznsKBlk
 - Agents List
 - Add New Agent
 
-  ####  View Agent
+- View Agent
    - Agent Info
    - Lead Filter (Status, Priority, Sort)
    - Lead List
