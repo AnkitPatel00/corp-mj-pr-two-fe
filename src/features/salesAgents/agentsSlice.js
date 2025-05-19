@@ -1,9 +1,11 @@
 import { createSlice ,createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios'
 
+const apiURl= "https://anvayacrm-be.vercel.app"
+
 export const fetchAgent = createAsyncThunk("fetch/agent",async() => { 
   try {
-     const response = await axios("http://localhost:3000/api/agents")
+     const response = await axios(`${apiURl}/api/agents`)
     return response.data 
   }
   catch (error)
@@ -20,7 +22,7 @@ export const fetchAgent = createAsyncThunk("fetch/agent",async() => {
 
 export const fetchAgentById = createAsyncThunk("fetch/agentbyId",async(agentId) => { 
   try {
-     const response = await axios(`http://localhost:3000/api/agents/${agentId}`)
+     const response = await axios(`${apiURl}/api/agents/${agentId}`)
     return response.data 
   }
   catch (error)
@@ -39,7 +41,7 @@ export const fetchAgentById = createAsyncThunk("fetch/agentbyId",async(agentId) 
 export const addAgent = createAsyncThunk("add/agent",async(agentData) => {
   
   try {
-     const response = await axios.post("http://localhost:3000/api/agents",agentData)
+     const response = await axios.post("${apiURl}/api/agents",agentData)
     return response.data 
   }
   catch (error)

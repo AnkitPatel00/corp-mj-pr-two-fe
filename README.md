@@ -1,40 +1,30 @@
-# Anvaya CRM
+### Technologies
+- NodeJS  
+- JavaScript  
+- React
+- Express
 
-## Routes
-1. Dashboard  
-2. Leads  
-3. Sales  
-4. Agent  
-5. Report
+## Demo Video
+Watch this video [here](https://drive.google.com/file/d/1VDAu5rjALKIhl78CznsKBlkSytOYxDEw/view?usp=sharing) 👈
 
-### 1. Dashboard 
+---
 
-    ✅ Lead List
-    ✅ Lead Status
-    ✅ Quick Filter
-    ✅ Add New Lead
+##  Features
 
-- Add New Lead Form
-  
-    ✅ Fields - Lead Name, Lead Source, Sales Agent, Lead Status, Priority, Time to Close, Tags  
-    ✅ Form Validation
-
-### 2.  Leads
-
-
-    ✅ Filter: Status, Agents, Sort By Days, Sort By Priority
-    ✅ Lead List - title, agent, time to close
-    ✅ Delete Lead
-    
-### - Leads Details
-
-- Lead Name
-- Sales Agent
-- Lead Source
+### Dashboard
+- Lead List
 - Lead Status
-- Priority
-- Time to Close  
-✅ Edit Lead
-- comments - agent, date, time  
-✅ add comment
+- Quick Filter (New, Contacted)
+- Add New Lead
 
+### Leads
+
+- Lead Filter (Status, Agents, sort By Days, sort By Priority)
+- Lead List
+- Lead Delete
+- Add New Lead
+
+### Sales
+
+- Search Lead by Name
+- Sale Lead List
