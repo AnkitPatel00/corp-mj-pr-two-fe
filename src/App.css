@@ -40,3 +40,28 @@
 .read-the-docs {
   color: #888;
 }
+
+/* layout app */
+
+/* src/App.css */
+
+/* Hide the sidebar and show the toggler button below 1280px */
+.show-on-small {
+  display: block !important;
+}
+
+.hide-on-small {
+  display: none !important;
+}
+
+/* Show the sidebar and hide the toggler button at 1280px and above */
+@media (min-width: 1280px) {
+  .show-on-small {
+    display: none !important;
+  }
+
+  .hide-on-small {
+    display: block !important;
+  }
+}
+

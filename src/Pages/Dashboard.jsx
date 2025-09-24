@@ -1,19 +1,41 @@
-import { useEffect, useState } from "react"
-import { useDispatch ,useSelector } from "react-redux"
-import { fetchLeads } from "../features/leads/leadsSlice"
-import { Link,useSearchParams } from "react-router-dom"
-import Loading from "../Component/Loading"
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLeads } from "../features/leads/leadsSlice";
+import { Link, useSearchParams } from "react-router-dom";
+import Loading from "../Component/Loading";
+
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  Grid,
+  Paper,
+} from "@mui/material";
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Cell,
+} from "recharts";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-
-  const { leads, leadStatus,leadError } = useSelector((state) => state.leadState)
+  const { leads, leadStatus, leadError } = useSelector(
+    (state) => state.leadState
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
-  
-  const queryArray = searchParams.getAll("status")
-
+  const queryArray = searchParams.getAll("status");
   const [statusFilter, setStatusFilter] = useState(queryArray);
 
   useEffect(() => {
@@ -24,108 +46,209 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(fetchLeads(searchParams.toString()));
-  }, [searchParams]);
+  }, [searchParams, dispatch]);
 
   const handleFilter = (e) => {
     const { checked, value } = e.target;
-
-    if (checked)
-    {
-      setStatusFilter((prev)=>[...prev,value])
+    if (checked) {
+      setStatusFilter((prev) => [...prev, value]);
+    } else {
+      setStatusFilter((prev) => prev.filter((status) => status !== value));
     }
-    else
-    {
-      setStatusFilter((prev)=>prev.filter((status)=>status!==value))
-      }
   };
 
- const leadsStatus = leads?.map((lead) => lead.status)
-  
-  const leadsStatusCount = leadsStatus.length > 0 && leadsStatus.reduce((acc,status) => {
-    acc[status] = (acc[status] || 0) + 1
-    return acc
-  }, {})
+  // Grouping leads by status
+  const leadsStatus = leads?.map((lead) => lead.status);
+  const leadsStatusCount =
+    leadsStatus.length > 0 &&
+    leadsStatus.reduce((acc, status) => {
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {});
 
-  
-  const leadsArrayWithCount = Object.entries(leadsStatusCount).map(([leadStatus, count]) => ({ leadStatus, count }))
-  
-  const LeadsList = () => {
-    return (
-      <div className="row my-4 gap-3">
-        {
-          leads.map((lead) => {
-            return (<div className="col-xl-3" key={lead._id}>
-              <Link className="link-underline link-underline-opacity-0" to={`/leads/${lead._id}`}>
-                <div className="border text-secondary rounded p-3">
-                 <h6 ><span className="fs-5">{lead.name}</span> <span className="badge text-bg-secondary fs-7">{lead.status}</span></h6>
-                  <i className="fa-solid fa-user me-2"> </i><span>{lead.salesAgent.name}</span>
-                </div>
-             </Link>
-              </div>)
-          })
-       }
-      </div>
-    )
-  }
+  const leadsArrayWithCount = Object.entries(leadsStatusCount || {}).map(
+    ([leadStatus, count]) => ({ status: leadStatus, count })
+  );
 
-  const LeadStatus = () => {
-    return (
-      <>
-        <label className="fs-5">Lead Status:</label>
-        <div className="row">
-          <div className="col-md-4">
+  const COLORS = ["#1976d2", "#9c27b0", "#f57c00", "#2e7d32", "#d32f2f"];
 
-             <ul className="list-group">
-{leadsArrayWithCount?.map((lead) => (
-  <li key={lead.leadStatus} className="list-group-item d-flex justify-content-between align-items-center">
-   <Link to={`/leads?status=${lead.leadStatus}`} className="link-underline text-secondary link-underline-opacity-0">{lead.leadStatus}</Link> 
-    <span className="badge text-bg-primary rounded-pill">{lead.count}</span>
-        </li>
+  // ---------- Components ----------
+
+  const Filters = () => (
+    <Paper
+      elevation={3}
+      sx={{
+        p: 2,
+        mb: 3,
+        borderRadius: 3,
+        background: "linear-gradient(135deg, #f5f7fa, #e6ecf5)",
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Quick Filters
+      </Typography>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={statusFilter.includes("New")}
+            value="New"
+            onChange={handleFilter}
+          />
+        }
+        label="New"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={statusFilter.includes("Contacted")}
+            value="Contacted"
+            onChange={handleFilter}
+          />
+        }
+        label="Contacted"
+      />
+    </Paper>
+  );
+
+  const LeadsList = () => (
+    <Grid container spacing={3} mb={4}>
+      {leads.map((lead) => (
+        <Grid item xs={12} md={6} lg={3} key={lead._id}>
+          <Link
+            to={`/leads/${lead._id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Card
+              elevation={4}
+              sx={{
+                height: "100%",
+                borderRadius: 3,
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {lead.name}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    display: "inline-block",
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 2,
+                    backgroundColor: "#1976d2",
+                    color: "#fff",
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                  }}
+                >
+                  {lead.status}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" mt={1}>
+                  👤 {lead.salesAgent.name}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
+        </Grid>
       ))}
-        </ul>
-            
-          </div>
-        </div>
-       
-      </>
-    )
-  }
+    </Grid>
+  );
 
-  const Filters = () => {
-    return (
-      <div>
+  const LeadStatusChart = () => (
+    <Paper
+      elevation={3}
+      sx={{
+        p: 3,
+        borderRadius: 3,
+        background: "linear-gradient(135deg, #fefefe, #f5f5f5)",
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Lead Status Overview
+      </Typography>
+      {leadsArrayWithCount.length > 0 ? (
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={leadsArrayWithCount}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="status" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="count" radius={[8, 8, 0, 0]}>
+              {leadsArrayWithCount.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      ) : (
+        <Typography variant="body2" color="text.secondary">
+          No data available
+        </Typography>
+      )}
+    </Paper>
+  );
 
-        <label className="fs-5 form-label">Quick Filters:</label>
-        <br/>
-
-        <div className="form-check form-check-inline">
-        <input checked={statusFilter.includes("New")} value="New" className="form-check-input" onChange={handleFilter} type="checkbox" id="new"/>
-        <label className="form-check-label"  htmlFor="new">New</label>
-        </div>
-
-        <div className="form-check form-check-inline">
-         <input checked={statusFilter.includes("Contacted")} value="Contacted" className="form-check-input" onChange={handleFilter} type="checkbox" id="contacted"/>
-        <label className="form-check-label" htmlFor="contacted">Contacted</label>  
-</div>
-      </div>
-    )
-  }
-
+  // ---------- UI ----------
 
   return (
-    <div className="">
+    <Box>
+      <Typography variant="h4" gutterBottom fontWeight="bold">
+        Dashboard
+      </Typography>
 
-      <h2 className="display-6 mb-4">Dashboard</h2>
-       {leadError &&<p className="text-danger">{leadError}</p>}
-       <Filters/>
-      {leadStatus==="loading" ? <Loading/> : <><LeadsList /> <LeadStatus /></>}
+      {leadError && (
+        <Typography color="error" gutterBottom>
+          {leadError}
+        </Typography>
+      )}
 
-       { leads.length<1 && <h5>No Lead Found</h5>}
-     
-      <Link to="/leads/add" className="btn btn-primary mt-3">Add New Lead</Link>
-      
-    </div>
-    
-  )
-}
-export default Dashboard
+      <Filters />
+
+      {leadStatus === "loading" ? (
+        <Loading />
+      ) : (
+        <>
+          <LeadsList />
+          <LeadStatusChart />
+        </>
+      )}
+
+      {leads.length < 1 && (
+        <Typography variant="h6" mt={2}>
+          No Lead Found
+        </Typography>
+      )}
+
+      <Button
+        component={Link}
+        to="/leads/add"
+        variant="contained"
+        size="large"
+        sx={{
+          mt: 3,
+          borderRadius: 3,
+          px: 4,
+          textTransform: "none",
+          fontWeight: "bold",
+          backgroundColor: "#000",
+          "&:hover": {
+            backgroundColor: "#333",
+          },
+        }}
+      >
+        ➕ Add New Lead
+      </Button>
+    </Box>
+  );
+};
+
+export default Dashboard;
